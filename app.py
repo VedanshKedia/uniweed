@@ -16,6 +16,12 @@ app.config['DEBUG'] = True
 api = Api(app)
 
 
+# @app.before_first_request
+# def create_tables():
+#     db.create_all()
+#     filldb()
+
+
 # api.add_resource(Item, '/item/<string:name>')
 
 api.add_resource(Ping, '/')
@@ -31,4 +37,5 @@ if __name__ == '__main__':
             db.create_all()
             filldb()
 
+    # app.run(port=5000)
     app.run(host='0.0.0.0')

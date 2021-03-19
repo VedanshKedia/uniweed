@@ -10,99 +10,122 @@ from tensorflow import keras
 import PIL
 import numpy as np
 
-# Disable layout optimizer to not change input data_format.
-#tf.config.optimizer.set_experimental_options({'layout_optimizer': False})
-
-# Enable MLIR Graph Optimizations
-# tf.config.experimental.enable_mlir_graph_optimization()
-
-# print('tensorflow_version', tf.__version__)
-# tf.contrib.resampler
-
-# export_path = "classify_saved_models/1599549821/"
-# # export_path = "classify_Weed_2.h5"
-
-# export_path = Path(export_path)
-
-# global graph
-
-# graph = tf.Graph()
-
-# with graph.as_default():
-#     model = tf.keras.models.load_model(export_path)
-
-# model = tf.keras.models.load_model(export_path)
-
-# Load Model
-
-# probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
-
-# Load and prepare Image
-
-size = (1000,1000)
-
-export_path = "classify_saved_models/1599549821"
-model = tf.keras.models.load_model(export_path)
-
-# ----changed code here (added code for probability model)----
-probability_model = tf.keras.Sequential([model, tf.keras.layers.Softmax()])
-
-# print(model.summary())
-
-def predict(image_path):
+def predict(image_path, lang, crop):
 
     image_path = 'temp_images/'+image_path
-
+    size=(600,600)
     im = PIL.Image.open(image_path).convert('RGB')
     im = im.resize(size, resample=PIL.Image.LANCZOS)
 
-    class_names = [
-        'Acalypha indica L.', 
-        'Alternanthera philoxeroides (Mart.) Griseb', 
-        'Amaranthus viridis Hook. F.', 
-        'Amaranthus spinosus L.', 
-        'Borreria hispida (L.) K. Schum',
-        'Brachiaria erusiformis (J.E.Smith) Griseb', 
-        'Brachiaria reptans Gard. and Hubb.', 
-        'Celosia argentea L.',
-        'Cleome viscosa L.', 
-        'Commelina benghalensis L.', 
-        'Croton bonplandianum Baill.',
-        'Cyperus difformis L.', 
-        'Dactyloctenium aegyptium (L.) Willd', 
-        'Digera arvensis Forssk.',
-        'Digitaria sanguinalis L. (Scop.)', 
-        'Dinebra retroflexa (Vahl) Panzer.',
-        'Echinochloa colona (L.) Link.', 
-        'Echinochloa crusgalli (L.) Beauv.', 
-        'Eleusine indica (L.) Gaertner.',
-        'Eragrostis pilosa L.', 
-        'Euphorbia geniculata Orteg.', 
-        'Euphorbia hirta L.',
-        'Euphorbia hypersifolia L.', 
-        'Euphorbia microphylla Heyneex. Roth.',
-        'Parthenium hysterophorus L.', 
-        'Phyllanthus niruri L.',
-        'Physalis minima L.', 
-        'Portulaca oleracea L.', 
-        'Stellaria media (L.) Vilt.',
-        'Trianthema portulacastrum L.'
-    ]
+        
+    probability_model = tf.keras.models.load_model('final_models/{}_model'.format(crop))
 
+    class_names = {
+        'soybean': ['Acalypha indica L.', 
+                    'Alternanthera philoxeroides (Mart.) Griseb', 
+                    'Amaranthus viridis Hook. F.', 
+                    'Amaranthus spinosus L.', 
+                    'Borreria hispida (L.) K. Schum',
+                    'Brachiaria erusiformis (J.E.Smith) Griseb', 
+                    'Brachiaria reptans Gard. and Hubb.', 
+                    'Celosia argentea L.',
+                    'Cleome viscosa L.', 
+                    'Commelina benghalensis L.', 
+                    'Croton bonplandianum Baill.',
+                    'Cyperus difformis L.', 
+                    'Dactyloctenium aegyptium (L.) Willd', 
+                    'Digera arvensis Forssk.',
+                    'Digitaria sanguinalis L. (Scop.)', 
+                    'Dinebra retroflexa (Vahl) Panzer.',
+                    'Echinochloa colona (L.) Link.', 
+                    'Echinochloa crusgalli (L.) Beauv.', 
+                    'Eleusine indica (L.) Gaertner.',
+                    'Eragrostis pilosa L.', 
+                    'Euphorbia geniculata Orteg.', 
+                    'Euphorbia hirta L.',
+                    'Euphorbia hypersifolia L.', 
+                    'Euphorbia microphylla Heyneex. Roth.',
+                    'Parthenium hysterophorus L.', 
+                    'Phyllanthus niruri L.',
+                    'Physalis minima L.', 
+                    'Portulaca oleracea L.', 
+                    'Stellaria media (L.) Vilt.',
+                    'Trianthema portulacastrum L.'],
+        'rice': ['Cyperus Difformis L', 'Cyperus Difformis L',
+                    'Cyperus Haspan L', 'Cyperus Haspan L', 
+                    'Cyperus Iria L', 'Cyperus Iria L', 
+                    'Cyperus Rotundus L', 'Cyperus Rotundus L', 
+                    'Echinochloa Colona (L.) Link', 'Echinochloa Colona (L.) Link',
+                    'Echinochloa Crus-Galli (L.) P. Beauv', 'Echinochloa Crus-Galli (L.) P. Beauv',
+                    'Monochoria vaginalis', 
+                    'Fimbristylis Miliacea (L.) Vahl', 'Fimbristylis Miliacea (L.) Vahl',
+                    'Ipomoea Aquatica Forssk', 
+                    'Leptochloa Chinensis (L.) Nees', 'Leptochloa Chinensis (L.) Nees', 
+                    'Ludwigia adcendes',
+                    'Ludwigia Octovalvis (Jacq.) P.H. Raven', 'Ludwigia Octovalvis (Jacq.) P.H. Raven',
+                    'Portulaca Oleracea L', 'Sphenoclea Zeylanica Gaertner'],
+        'maize': ['Alternanthera sessilis',
+                     'Amaranthus viridis',
+                     'Celosia argentea',
+                     'Chloris barbata',
+                     'Cleome viscosa',
+                     'Convolvulus arvensis',
+                     'Dactyloctenium aegyptium',
+                     'Digera arvensis',
+                     'Digitaria sanguinalis',
+                     'Echinochloa colona',
+                     'Echinochloa crus-galli',
+                     'Eleusine indica',
+                     'Parthenium hysterophorus',
+                     'Physalis minima',
+                     'Polygonum aviculare',
+                     'Polygonum paronychia',
+                     'Portulaca oleracea',
+                     'Trianthema portulacastrum',
+                     'Xanthium strumarium'],
+        'wheat': ['Anagallis arvensis',
+                    'Avena fatua',
+                    'Chenopodium album',
+                    'Chenopodium ficifolium',
+                    'Chenopodium nutans',
+                    'Coronopus didymus',
+                    'Convolvulus arvensis'
+                    'Fumaria parviflora',
+                    'Malva parviflora',
+                    'Melilotus albus Medik',
+                    'Phalaris minor',
+                    'Poa annua',
+                    'Portulaca oleracea',
+                    'Rumex spp',
+                    'Sonchus arvensis',
+                    'Spergula arvensis',
+                    'Vicia sativa'],
+        'cotton': ['Amaranthus viridis',
+                    'Cynodon dactylon',
+                    'Cyperus rotundus',
+                    'Dactyloctenium aegyptium',
+                    'Digitaria sanguinalis',
+                    'Echinochloa colona',
+                    'Echinochloa crus-galli',
+                    'Eleusine indica',
+                    'Eragrostis minor',
+                    'Euphorbia hirta',
+                    'Euphorbia spp',
+                    'Portulaca oleracea',
+                    'Trianthema portulacastrum']
+    }
+
+
+
+   
     img_array = np.array(im).astype(float)
     img_array = np.expand_dims(img_array, axis=0).astype(float)
-  #  print("\n---img_array.shape---\n", img_array.shape)
-  #  print("\n---img_array.type---\n", type(img_array))
+    # print("img_array.shape\n", img_array.shape)
     # img_array.shape
 
-  #  print('\n\n---model summary---\n\n')
-  #  print(model.summary())
+    # with graph.as_default():
+    # predictions = model.predict(img_array)
 
-  #  print('\n\n\n------------------------------ model prediction----------------------------- \n\n\n')
-  #  print(model.predict(img_array))
-
-#    predictions = model.predict(img_array)
-# ----change made here (added code to get prediction from prob model)-------
     predictions = probability_model.predict(img_array)
     print("\n\nGetting Result from Probability Model\n\n")
     print(predictions)
@@ -111,18 +134,12 @@ def predict(image_path):
 
     print("\nconf_score:\n", conf_score)
 
-    if (conf_score>=0.4):
-        result = class_names[np.argmax(predictions)]
+    weed_names = class_names[crop]
+    if (conf_score>=0.2):
+        result = weed_names[np.argmax(predictions)]
         # print("Weed Name: ", result)
 
         return {'result': result}
     else:
-        return {'message': "no weed found"}
-
-    # predictions = probability_model.predict(img_array)
-# ----Change made here (commented)-----
-#    result = class_names[np.argmax(predictions)]
-    # print("Weed Name: ", result)
-
-#    return result
-
+        msg_return = message(2, lang)
+        return {'message': msg_return}

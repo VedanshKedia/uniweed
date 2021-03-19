@@ -1,4 +1,3 @@
-
 from app import app
 from db import db
 from resources.create_db import filldb
