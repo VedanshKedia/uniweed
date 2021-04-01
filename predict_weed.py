@@ -13,7 +13,11 @@ import numpy as np
 def predict(image_path, lang, crop):
 
     image_path = 'temp_images/'+image_path
-    size=(600,600)
+    crop_size_1000 = ['rice', 'soybean']
+    if (crop in crop_size_1000):
+        size = (1000,1000)
+    else:
+        size=(600,600)
     im = PIL.Image.open(image_path).convert('RGB')
     im = im.resize(size, resample=PIL.Image.LANCZOS)
 
