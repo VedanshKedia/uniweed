@@ -9,3 +9,5 @@ final_soy_prod.xlsx
 etc/
 var/
 temp_images/
+final_models/
+product_list.csv

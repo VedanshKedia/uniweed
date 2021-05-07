@@ -9,6 +9,7 @@ from tensorflow import keras
 # from tensorflow.keras.models import Sequential
 import PIL
 import numpy as np
+from alert import message
 
 def predict(image_path, lang, crop):
 
