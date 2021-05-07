@@ -9,7 +9,6 @@ log/
 etc/
 var/
 temp_images/
-run.py
 run.sh
 uswgi.ini
 wsgi.py
