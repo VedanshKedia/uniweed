@@ -1,0 +1,17 @@
+__pycache__/
+classify_saved_models/
+data.db
+requirements.txt
+requirement_copy.txt
+final_soy_prod.xlsx
+venv/
+log/
+etc/
+var/
+temp_images/
+run.py
+run.sh
+uswgi.ini
+wsgi.py
+final_models/
+product_list.csv
