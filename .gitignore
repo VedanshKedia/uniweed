@@ -14,3 +14,4 @@ uswgi.ini
 wsgi.py
 final_models/
 product_list.csv
+disease_product.csv
