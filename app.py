@@ -42,5 +42,5 @@ if __name__ == '__main__':
             filldb_weed()
             filldb_disease()
 
-    app.run(port=5000)
-    # app.run(host='0.0.0.0')
+    # app.run(port=5000)
+    app.run(host='0.0.0.0')
