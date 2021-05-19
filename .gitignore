@@ -8,10 +8,8 @@ venv/
 log/
 etc/
 var/
-temp_images/
 run.sh
 uswgi.ini
-wsgi.py
 final_models/
 product_list.csv
 disease_product.csv
