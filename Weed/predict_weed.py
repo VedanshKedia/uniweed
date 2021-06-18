@@ -92,8 +92,8 @@ def predict(image_path, lang, crop):
                     'Chenopodium album',
                     'Chenopodium ficifolium',
                     'Chenopodium nutans',
+                    'Convolvulus arvensis',
                     'Coronopus didymus',
-                    'Convolvulus arvensis'
                     'Fumaria parviflora',
                     'Malva parviflora',
                     'Melilotus albus Medik',
